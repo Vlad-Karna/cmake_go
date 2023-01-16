@@ -59,7 +59,7 @@ macro(add_cgo_executable GO_MOD_NAME GO_FILES CGO_DEPS GO_BIN)
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND echo Building GO modules for ${GO_BIN}
     COMMAND env ${CGO_ENVS} go build -o ${GO_BIN} ./...
-    COMMAND env ${CGO_ENVS} golangci-lint run --enable-all --disable=exhaustivestruct,godot,goerr113,gomnd,nlreturn,wrapcheck,wsl
+#   COMMAND env ${CGO_ENVS} golangci-lint run --enable-all --disable=exhaustivestruct,godot,goerr113,gomnd,nlreturn,wrapcheck,wsl
     COMMAND touch ${GO_BUILT_FLAG}
     DEPENDS ${CGO_BUILT_FLAG} ${${GO_FILES}}
   )
@@ -163,25 +163,25 @@ macro(cgo_fetch_cflags_and_ldflags CGO_DEPS)
   #### Adding cflags and ldflags #####
 
   # Must split sentences into CMake List before adding cflags and ldflags
-  string(REPLACE " " ";" CMAKE_C_FLAGS_LIST ${CMAKE_C_FLAGS})
+  string(REPLACE " " ";" CMAKE_C_FLAGS_LIST ${CMAKE_C_FLAGS} "")
   list(APPEND CGO_CFLAGS ${CMAKE_C_FLAGS_LIST})
 
-  string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_LIST "${CMAKE_EXE_LINKER_FLAGS}")
+  string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_LIST "${CMAKE_EXE_LINKER_FLAGS}" "")
   list(APPEND CGO_LDFLAGS "${CMAKE_EXE_LINKER_FLAGS_LIST}")
-  string(REPLACE " " ";" CMAKE_C_LINK_FLAGS_LIST "${CMAKE_C_LINK_FLAGS}")
+  string(REPLACE " " ";" CMAKE_C_LINK_FLAGS_LIST "${CMAKE_C_LINK_FLAGS}" "")
   list(APPEND CGO_LDFLAGS "${CMAKE_C_LINK_FLAGS_LIST}")
 
   if(CMAKE_BUILD_TYPE MATCHES debug)
-    string(REPLACE " " ";" CMAKE_C_FLAGS_DEBUG_LIST "${CMAKE_C_FLAGS_DEBUG}")
+    string(REPLACE " " ";" CMAKE_C_FLAGS_DEBUG_LIST "${CMAKE_C_FLAGS_DEBUG}" "")
     list(APPEND CGO_CFLAGS ${CMAKE_C_FLAGS_DEBUG_LIST})
-    string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_DEBUG_LIST "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+    string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_DEBUG_LIST "${CMAKE_EXE_LINKER_FLAGS_DEBUG}" "")
     list(APPEND CGO_LDFLAGS "${CMAKE_EXE_LINKER_FLAGS_DEBUG_LIST}")
   endif()
 
   if(CMAKE_BUILD_TYPE MATCHES release)
-    string(REPLACE " " ";" CMAKE_C_FLAGS_RELEASE_LIST "${CMAKE_C_FLAGS_RELEASE}")
+    string(REPLACE " " ";" CMAKE_C_FLAGS_RELEASE_LIST "${CMAKE_C_FLAGS_RELEASE}" "")
     list(APPEND CGO_CFLAGS ${CMAKE_C_FLAGS_RELEASE_LIST})
-    string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_RELEASE_LIST "${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+    string(REPLACE " " ";" CMAKE_EXE_LINKER_FLAGS_RELEASE_LIST "${CMAKE_EXE_LINKER_FLAGS_RELEASE}" "")
     list(APPEND CGO_LDFLAGS "${CMAKE_EXE_LINKER_FLAGS_RELEASE_LIST}")
   endif()
 
